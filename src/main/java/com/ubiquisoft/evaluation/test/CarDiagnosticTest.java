@@ -94,13 +94,8 @@ public class CarDiagnosticTest {
         diagnosticEngine.executeDiagnostics(car);
 
         originalOutput.println("Output from test data:\n" + outputContent.toString().trim());
-        assertEquals("Damaged Part Detected: ENGINE - Condition: USED" + System.lineSeparator() +
-                "Damaged Part Detected: ELECTRICAL - Condition: NO_POWER" + System.lineSeparator() +
-                "Damaged Part Detected: TIRE - Condition: FLAT" + System.lineSeparator() +
-                "Damaged Part Detected: TIRE - Condition: FLAT" + System.lineSeparator() +
-                "Damaged Part Detected: TIRE - Condition: DAMAGED" + System.lineSeparator() +
-                "Damaged Part Detected: OIL_FILTER - Condition: CLOGGED" + System.lineSeparator() +
-                "Vehicle has damaged parts. Ending diagnostic.".trim(), outputContent.toString().trim());
+        assertEquals("Missing Part(s) Detected: FUEL_FILTER - Count: 1" + System.lineSeparator() +
+                "Vehicle is missing parts. Ending diagnostic.".trim(), outputContent.toString().trim());
     }
 
     @Test
@@ -128,11 +123,38 @@ public class CarDiagnosticTest {
         diagnosticEngine.executeDiagnostics(car);
 
         originalOutput.println("Output from test data:\n" + outputContent.toString().trim());
-        assertEquals("Damaged Part Detected: TIRE - Condition: FLAT" + System.lineSeparator() +
-                "Damaged Part Detected: TIRE - Condition: FLAT" + System.lineSeparator() +
-                "Damaged Part Detected: TIRE - Condition: FLAT" + System.lineSeparator() +
-                "Damaged Part Detected: TIRE - Condition: FLAT" + System.lineSeparator() +
-                "Vehicle has damaged parts. Ending diagnostic.".trim(), outputContent.toString().trim());
+        assertEquals("Missing Part(s) Detected: TIRE - Count: 2" + System.lineSeparator() +
+                "Vehicle is missing parts. Ending diagnostic.".trim(), outputContent.toString().trim());
+
+    }
+
+    @Test
+    public void TestSampleCar4() throws JAXBException{
+        // Load classpath resource
+        InputStream xml = ClassLoader.getSystemResourceAsStream("SampleCar4.xml");
+
+        // Verify resource was loaded properly
+        if (xml == null) {
+            System.err.println("An error occurred attempting to load SampleCar4.xml");
+            System.exit(1);
+        }
+
+        // Build JAXBContext for converting XML into an Object
+
+        JAXBContext context = JAXBContext.newInstance(Car.class, Part.class);
+        Unmarshaller unmarshaller = context.createUnmarshaller();
+
+        Car car = (Car) unmarshaller.unmarshal(xml);
+
+
+        // Build new Diagnostics Engine and execute on deserialized car object.
+
+        CarDiagnosticEngine diagnosticEngine = new CarDiagnosticEngine();
+        diagnosticEngine.executeDiagnostics(car);
+
+        originalOutput.println("Output from test data:\n" + outputContent.toString().trim());
+        assertEquals("Missing Part(s) Detected: TIRE - Count: 4" + System.lineSeparator() +
+                "Vehicle is missing parts. Ending diagnostic.".trim(), outputContent.toString().trim());
 
     }
 
@@ -193,11 +215,8 @@ public class CarDiagnosticTest {
         diagnosticEngine.executeDiagnostics(car);
 
         originalOutput.println("Output from test data:\n" + outputContent.toString().trim());
-        assertEquals("Damaged Part Detected: ENGINE - Condition: USED" + System.lineSeparator() +
-                "Damaged Part Detected: ELECTRICAL - Condition: NO_POWER" + System.lineSeparator() +
-                "Damaged Part Detected: TIRE - Condition: FLAT" + System.lineSeparator() +
-                "Damaged Part Detected: OIL_FILTER - Condition: CLOGGED" + System.lineSeparator() +
-                "Vehicle has damaged parts. Ending diagnostic.".trim(), outputContent.toString().trim());
+        assertEquals("Vehicle missing all parts. Ending diagnostic." + System.lineSeparator() +
+                "Vehicle is missing parts. Ending diagnostic.".trim(), outputContent.toString().trim());
 
     }
 

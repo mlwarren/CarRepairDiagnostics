@@ -34,11 +34,6 @@
 		<condition>DAMAGED</condition>
 	</parts>
 	<parts>
-		<inventoryId>fuel_filter</inventoryId>
-		<type>FUEL_FILTER</type>
-		<condition>GOOD</condition>
-	</parts>
-	<parts>
 		<inventoryId>oil_filter</inventoryId>
 		<type>OIL_FILTER</type>
 		<condition>CLOGGED</condition>

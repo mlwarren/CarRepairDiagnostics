@@ -38,7 +38,7 @@ public class Car {
 		//Build map of available parts
 		Map<PartType, Integer> availableParts = new EnumMap<PartType, Integer>(PartType.class);
 		int tireCount = 0;
-		if(!parts.isEmpty()) {
+		if(parts!=null && !parts.isEmpty()) {
 			for (Part part : parts) {
 				if (part.getType().equals(PartType.TIRE)) {
 					tireCount++;
