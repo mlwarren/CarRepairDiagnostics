@@ -6,12 +6,12 @@
 	<parts>
 		<inventoryId>engine</inventoryId>
 		<type>ENGINE</type>
-		<condition>USED</condition>
+		<condition>NEW</condition>
 	</parts>
 	<parts>
 		<inventoryId>electrical</inventoryId>
 		<type>ELECTRICAL</type>
-		<condition>NO_POWER</condition>
+		<condition>GOOD</condition>
 	</parts>
 	<parts>
 		<inventoryId>tire</inventoryId>
@@ -21,12 +21,12 @@
 	<parts>
 		<inventoryId>tire</inventoryId>
 		<type>TIRE</type>
-		<condition>FLAT</condition>
+		<condition>NEW</condition>
 	</parts>
 	<parts>
 		<inventoryId>tire</inventoryId>
 		<type>TIRE</type>
-		<condition>WORN</condition>
+		<condition>NEW</condition>
 	</parts>
 	<parts>
 		<inventoryId>tire</inventoryId>
@@ -41,6 +41,6 @@
 	<parts>
 		<inventoryId>oil_filter</inventoryId>
 		<type>OIL_FILTER</type>
-		<condition>CLOGGED</condition>
+		<condition>GOOD</condition>
 	</parts>
 </car>

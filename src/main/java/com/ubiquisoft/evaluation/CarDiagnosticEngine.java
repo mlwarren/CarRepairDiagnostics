@@ -95,21 +95,21 @@ public class CarDiagnosticEngine {
 		boolean requiredFieldsPresent = validateFields(car.getYear(), car.getMake(), car.getModel());
 		if(!requiredFieldsPresent){
 			System.out.println("Please enter required vehicle information. Ending diagnostic.");
-			System.exit(1);
+            return;
 		}
 
 		//Second Step
 		boolean noMissingParts = validateNoPartsMissing(car.getMissingPartsMap());
 		if(!noMissingParts){
 			System.out.println("Vehicle is missing parts. Ending diagnostic.");
-			System.exit(1);
+            return;
 		}
 
 		//Third Step
 		boolean allWorkingParts = validatePartsCondition(car.getParts());
 		if(!allWorkingParts){
 			System.out.println("Vehicle has damaged parts. Ending diagnostic.");
-			System.exit(1);
+            return;
 		}
 
 		//Fourth Step
