@@ -3,6 +3,8 @@ package com.ubiquisoft.evaluation.domain;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +15,8 @@ public class Car {
 	private String year;
 	private String make;
 	private String model;
+
+	private static final int NUM_CAR_TIRES = 4;
 
 	private List<Part> parts;
 
@@ -31,7 +35,42 @@ public class Car {
 		 *      }
 		 */
 
-		return null;
+		//Build map of available parts
+		Map<PartType, Integer> availableParts = new EnumMap<PartType, Integer>(PartType.class);
+		int tireCount = 0;
+		if(!parts.isEmpty()) {
+			for (Part part : parts) {
+				if (part.getType().equals(PartType.TIRE)) {
+					tireCount++;
+					availableParts.put(part.getType(), tireCount);
+				} else { //Assume only 1 of every other type per comments above
+					availableParts.put(part.getType(), 1);
+				}
+			}
+
+			//Derive missing parts from available parts list
+			Map<PartType, Integer> missingParts = new EnumMap<PartType, Integer>(PartType.class);
+			int missingTireCount = 4;
+			for (PartType partType : PartType.values()) {
+				if (availableParts.get(partType) == null) {
+					if (partType.equals(PartType.TIRE)) {
+						missingParts.put(partType, 4);
+					} else {
+						missingParts.put(partType, 1);
+					}
+				} else {
+					if (partType.equals(PartType.TIRE) &&
+							availableParts.get(partType).longValue() < 4) {
+						missingParts.put(partType, NUM_CAR_TIRES - availableParts.get(partType));
+					}
+				}
+			}
+			return missingParts;
+		}
+		else{
+			return null;
+		}
+
 	}
 
 	@Override

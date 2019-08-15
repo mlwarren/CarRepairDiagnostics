@@ -9,8 +9,60 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
 
 public class CarDiagnosticEngine {
+
+	public boolean validatePartsCondition(List<Part> parts){
+		boolean allWorkingParts=true;
+		for(Part part: parts){
+			if(! (part.getCondition().equals(ConditionType.NEW) ||
+					part.getCondition().equals(ConditionType.GOOD) ||
+					part.getCondition().equals(ConditionType.WORN)) ){
+				printDamagedPart(part.getType(), part.getCondition());
+				allWorkingParts=false;
+			}
+		}
+
+		return allWorkingParts;
+	}
+
+	public boolean validateNoPartsMissing(Map<PartType, Integer> missingParts){
+		if(missingParts==null){
+			System.out.println("Vehicle missing all parts. Ending diagnostic.");
+			return false;
+		}
+		if(missingParts.isEmpty()){
+			return true;
+		}
+
+		for(Map.Entry<PartType, Integer> missingPart: missingParts.entrySet()){
+			printMissingPart(missingPart.getKey(), missingPart.getValue());
+		}
+		return false;
+	}
+
+	public boolean validateFields(String year, String make, String model){
+		boolean validated=true;
+		//If all fields are null alert user and exit diagnostic tool
+		if(year==null || year.equals("")){
+			printMissingInformation("year");
+			validated=false;
+		}
+
+		if(make==null || make.equals("")){
+			printMissingInformation("make");
+			validated=false;
+		}
+
+		if(model==null || model.equals("")){
+			printMissingInformation("model");
+			validated=false;
+		}
+
+		return validated;
+	}
 
 	public void executeDiagnostics(Car car) {
 		/*
@@ -39,7 +91,34 @@ public class CarDiagnosticEngine {
 		 * console output is as least as informative as the provided methods.
 		 */
 
+		//First Step
+		boolean requiredFieldsPresent = validateFields(car.getYear(), car.getMake(), car.getModel());
+		if(!requiredFieldsPresent){
+			System.out.println("Please enter required vehicle information. Ending diagnostic.");
+			System.exit(1);
+		}
 
+		//Second Step
+		boolean noMissingParts = validateNoPartsMissing(car.getMissingPartsMap());
+		if(!noMissingParts){
+			System.out.println("Vehicle is missing parts. Ending diagnostic.");
+			System.exit(1);
+		}
+
+		//Third Step
+		boolean allWorkingParts = validatePartsCondition(car.getParts());
+		if(!allWorkingParts){
+			System.out.println("Vehicle has damaged parts. Ending diagnostic.");
+			System.exit(1);
+		}
+
+		//Fourth Step
+		System.out.println(String.format("Your %s %s %s vehicle is in working condition!",
+					car.getYear(), car.getMake(), car.getModel()));
+	}
+
+	private void printMissingInformation(String carInformation){
+		System.out.println(String.format("Missing Car Info: %s", carInformation));
 	}
 
 	private void printMissingPart(PartType partType, Integer count) {
